@@ -1,26 +1,24 @@
 package homework;
 
-import homework.battle_map.EnemyBattleMap;
+import homework.battle_map.BattleMap;
 import homework.ship.AbstractShip;
 import homework.ship.ShipFactory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
 
-        EnemyBattleMap map = new EnemyBattleMap();
-        map.display();
-        AbstractShip ship = new ShipFactory().createShip(1);
-        AbstractShip ship2 = new ShipFactory().createShip(2);
-        AbstractShip ship3 = new ShipFactory().createShip(3);
-        AbstractShip ship4 = new ShipFactory().createShip(4);
-        System.out.println(ship);
-        System.out.println(ship2);
-        System.out.println(ship3);
-        System.out.println(ship4);
-        BattleSetShipsOnMapService service = new BattleSetShipsOnMapService();
-        for (int i = 0; i <20 ; i++) {
-            System.out.println(service.getRandomStartSetPoint(ship3));
-
+        SetShipsOnMapService service = new SetShipsOnMapService();
+        service.getMapWithShips().display();
+        ArrayList<AbstractShip> listOFShips = service.getInitialListOfShips();
+        for (AbstractShip ship : listOFShips) {
+            ArrayList<int[]> allCoordinates = ship.getAllCoordinates();
+            System.out.println("ship length: "+ship.getLenght());
+            for (int[] coordinates : allCoordinates) {
+                System.out.println(Arrays.toString(coordinates));
+            }
         }
 
     }

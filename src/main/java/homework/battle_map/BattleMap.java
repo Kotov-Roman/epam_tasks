@@ -5,9 +5,9 @@ import java.util.ArrayList;
 /**
  *
  */
-public class EnemyBattleMap extends  AbstractBattleMap{
+public class BattleMap extends  AbstractBattleMap{
 
-    public EnemyBattleMap(){
+    public BattleMap(){
         for (int index = 0; index < 10 ; index++) {
             map.add(new ArrayList<Character>());
             for (int i = 0; i <10 ; i++) {

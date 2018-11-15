@@ -17,18 +17,24 @@ public class FourDecksShip extends AbstractShip {
 
     @Override
     public void setIntermediateCoordinates() {
-        super.setIntermediateCoordinates();
         if (xFrontSideShipPosition != xBacksideShipPosition) {
             xThirdDeckPosition = xBacksideShipPosition - 1;
             xSecondDeckPosition = xBacksideShipPosition - 2;
             yThirdDeckPosition = yBacksideShipPosition;
             ySecondDeckPosition = yBacksideShipPosition;
         }
-        else if (xFrontSideShipPosition == xBacksideShipPosition){
+        else {
             xThirdDeckPosition = xBacksideShipPosition;
             xSecondDeckPosition = xBacksideShipPosition;
             yThirdDeckPosition = yBacksideShipPosition -1;
             ySecondDeckPosition = yBacksideShipPosition -2;
         }
+    }
+
+    @Override
+    public void setCoordinatesList() {
+        super.setCoordinatesList();
+        shipCoordinatesList.add(new int[]{xSecondDeckPosition, ySecondDeckPosition});
+        shipCoordinatesList.add(new int[]{xThirdDeckPosition, yThirdDeckPosition});
     }
 }
