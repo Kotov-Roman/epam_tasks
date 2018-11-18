@@ -10,16 +10,21 @@ public abstract class AbstractShip {
     int yBacksideShipPosition;
     int lenght;
     boolean isAlive;
-    public ArrayList<int []> shipCoordinatesList = new ArrayList<>();
+    public ArrayList<int[]> shipCoordinatesList = new ArrayList<>();
     List<Character> shipView = new ArrayList<>();
+    public int shipLife;
 
-    public ArrayList<String> getShipCoordinatesList(){
-        ArrayList <String> list = new ArrayList<>(4);
-        list.add("xFrontSideShipPosition = " + xFrontSideShipPosition);
-        list.add("yFrontSideShipPosition = " + yFrontSideShipPosition);
-        list.add("xBacksideShipPosition = " + xBacksideShipPosition);
-        list.add("yBacksideShipPosition = " + yBacksideShipPosition);
-        return list;
+    public ArrayList<int[]> getShipCoordinatesList() {
+        return shipCoordinatesList;
+    }
+
+    public boolean checkIsShipDead() {
+        if (shipLife < 1) {
+            setAlive(false);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void setCoordinatesList() {
@@ -27,13 +32,12 @@ public abstract class AbstractShip {
         shipCoordinatesList.add(new int[]{xBacksideShipPosition, yBacksideShipPosition});
     }
 
-    public ArrayList <int []> getAllCoordinates(){
+    public ArrayList<int[]> getAllCoordinates() {
         return shipCoordinatesList;
     }
 
 
-
-    public void setIntermediateCoordinates(){
+    public void setIntermediateCoordinates() {
     }
 
     public int getxFrontSideShipPosition() {

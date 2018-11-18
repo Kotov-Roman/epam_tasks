@@ -6,5 +6,6 @@ public class OneDecksShip extends AbstractShip {
         shipView.add('■');
         lenght = shipView.size();
         isAlive = true;
+        shipLife =1;
     }
 }

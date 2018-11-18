@@ -10,29 +10,6 @@ public class ShootService {
 
     ArrayList<int []> shootList = new ArrayList<>();
 
-    public static void main(String[] args) throws IOException {
-        ShootService playerShootService = new ShootService();
-        int[] shootCoordinates = playerShootService.shoot(10, 9);
-        int[] shootCoordinates1 = playerShootService.shoot(9, 9);
-        int[] shootCoordinates2 = playerShootService.shoot(0, 0);
-        ArrayList<int []> list = new ArrayList<>();
-        list.add(shootCoordinates);
-        list.add(shootCoordinates);
-        list.add(shootCoordinates1);
-        list.add(shootCoordinates1);
-        list.add(shootCoordinates2);
-        list.add(shootCoordinates2);
-
-        for (int[] shoot :list) {
-            if (playerShootService.checkCoordinatesForRepeatAndCorrect(shoot)){
-                playerShootService.addCoordinatesToShootList(shoot);
-            }
-        }
-
-        for (int[] shoot :playerShootService.getShootList()){
-            System.out.println(Arrays.toString(shoot));
-        }
-    }
 
     public int[] shoot(int x, int y) {
         return new int[]{x, y};
@@ -42,7 +19,7 @@ public class ShootService {
         return false;
     }
 
-    public  boolean checkCoordinatesForCorrect(int[] coordinates) {
+/*    public  boolean checkCoordinatesForCorrect(int[] coordinates) {
         int x = coordinates[0];
         int y = coordinates[1];
         boolean isX_Correct = (x < 10) & (x >= 0);
@@ -53,7 +30,7 @@ public class ShootService {
             System.out.println("wrong input");
             return false;
         }
-    }
+    }*/
 
     public void addCoordinatesToShootList(int [] coordinatesToAdd ){
         shootList.add(coordinatesToAdd);
@@ -69,9 +46,9 @@ public class ShootService {
         return true;
     }
 
-    public boolean checkCoordinatesForRepeatAndCorrect (int [] coordinatesToCheck){
+/*    public boolean checkCoordinatesForRepeatAndCorrect (int [] coordinatesToCheck){
         return checkCoordinatesForCorrect(coordinatesToCheck) & checkShootForRepeat(coordinatesToCheck);
-    }
+    }*/
 
 
 

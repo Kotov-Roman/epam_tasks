@@ -12,6 +12,7 @@ public class FourDecksShip extends AbstractShip {
         shipView.add('■');
         shipView.add('■');
         lenght = shipView.size();
+        shipLife = 4;
         isAlive = true;
     }
 

@@ -10,6 +10,7 @@ public class ThreeDecksShip extends AbstractShip {
         shipView.add('■');
         lenght = shipView.size();
         isAlive = true;
+        shipLife = 3;
     }
 
     @Override

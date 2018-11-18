@@ -6,5 +6,6 @@ public class TwoDecksShip extends AbstractShip {
         shipView.add('■');
         lenght = shipView.size();
         isAlive = true;
+        shipLife = 2;
     }
 }
