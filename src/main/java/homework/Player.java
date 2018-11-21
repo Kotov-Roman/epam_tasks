@@ -5,6 +5,7 @@ import homework.battle_map.BattleMap;
 import homework.ship.AbstractShip;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Player {
     SetShipsOnMapService playerSetShipsOnMapService = new SetShipsOnMapService();
@@ -12,6 +13,8 @@ public class Player {
     AbstractBattleMap playerMapToDrowShoots = new BattleMap();
     ArrayList<AbstractShip> playerListOfShips = playerSetShipsOnMapService.getInitialListOfShips();
     ArrayList<String> playerShootList = new ArrayList<>();
+    AbstractShip lastKilledShip = null;
+    boolean justKilledShip = false;
 
     /**
      * поставить поле перед в самом начале что бы нормально рисовалось
@@ -42,9 +45,14 @@ public class Player {
         }
         addCoordinatesToShootList(coordinates);
 
-        System.out.println("count of shoots: " + getPlayerShootList().size());// deeeeeeeeeeeelete this
         if (isShootHitTheDeck(coordinates, enemyListOfShips)) {
-            System.out.println("Shoot hit the deck");
+            if (justKilledShip) {
+                System.out.println("Ship was killed");
+                System.out.println( enemyListOfShips.size() + " ships left to destroy");
+                justKilledShip = false;
+            } else {
+                System.out.println("Shoot hit the deck");
+            }
             drawHit(coordinates);
             return repeatTurn();
         } else {
@@ -62,6 +70,7 @@ public class Player {
         int y = Character.getNumericValue(coordinates.charAt(1));
         playerMapToDrowShoots.getMap().get(y).set(x, '✕');
     }
+
     public void drawHit(String coordinates) {
         int x = Character.getNumericValue(coordinates.charAt(0));
         int y = Character.getNumericValue(coordinates.charAt(1));
@@ -75,9 +84,13 @@ public class Player {
                 if (shipCoordinates.equals(coordinates)) {/// отнимаем жизни корабля проверяем не убил ли, если убит - удаляем его из списка
                     enemyShip.shipLife--;
                     if (enemyShip.shipLife == 0) {
-                        System.out.println("Ship killed");
+                        //System.out.println("Ship killed");
+                        lastKilledShip = enemyShip;
+                        drawKilledShip();
+                        justKilledShip = true;
+
+
                         enemyListOfShips.remove(enemyShip);
-                        System.out.println("У противника осталось " + enemyListOfShips.size() + " кораблей");
                     }
                     return true;
                 }
@@ -87,16 +100,52 @@ public class Player {
         return false;
     }
 
-    public void killShip(ArrayList<AbstractShip> listOfEnemyShips, int[] shipCoordinates) {
+    public void drawKilledShip() {
+        ArrayList<int[]> shipArea = new ArrayList<>();
+        for (int[] coordinates : lastKilledShip.getAllCoordinatesList()) {
+            ArrayList<int[]> listToadd = flagDeck(coordinates);
+            shipArea.addAll(listToadd);
+        }
+        for (int[] coordinates : shipArea) {
+            int x = coordinates[0];
+            int y = coordinates[1];
+            if (playerMapToDrowShoots.getMap().get(y).get(x).equals('☐')) {
+                drawMiss(x + "" + y);
+            }
+            if (playerMapToDrowShoots.getMap().get(y).get(x).equals('■')) {
+                drawHit(x + "" + y);
+            }
+
+        }
+
 
     }
 
-    public boolean isEnemyListOfShipsEmpty(ArrayList<AbstractShip> enemyListOfShips) {
-        if (enemyListOfShips.size() > 0) {
-            return false;
-        } else {
-            return true;
+    public ArrayList<int[]> flagDeck(int[] coordinates) {
+        ArrayList<int[]> listOfFlags = new ArrayList<>();
+        int x = coordinates[0];
+        int y = coordinates[1];
+        int xHelper = -1;
+
+        for (int i = 0; i < 3; i++) {
+            int yHelper = -1;
+
+            if (x + xHelper >= 0 & x + xHelper < 10) {
+
+                for (int j = 0; j < 3; j++) {
+                    if (y + yHelper >= 0 & y + yHelper < 10) {
+                        listOfFlags.add(new int[]{x + xHelper, y + yHelper});
+                    }
+                    yHelper++;
+                }
+            }
+            xHelper++;
         }
+        return listOfFlags;
+    }
+
+    public boolean isEnemyListOfShipsEmpty(ArrayList<AbstractShip> enemyListOfShips) {
+        return enemyListOfShips.size() == 0;
     }
 
     /**
@@ -110,7 +159,7 @@ public class Player {
             return true;
         }
         if (coordinates.length() != 2) {
-            System.out.println("length wrong");
+            System.out.println("Wrong input");
             return true;
         }
         int x = Character.getNumericValue(coordinates.charAt(0));
@@ -118,10 +167,9 @@ public class Player {
         boolean isX_Correct = (x < 10) & (x >= 0);
         boolean isY_Correct = (y < 10) & (y >= 0);
         if (isX_Correct & isY_Correct) {
-            System.out.println("all right");
             return false;
         } else {
-            System.out.println("wrong input");
+            System.out.println("Wrong input");
             return true;
         }
     }

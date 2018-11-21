@@ -32,7 +32,7 @@ public abstract class AbstractShip {
         shipCoordinatesList.add(new int[]{xBacksideShipPosition, yBacksideShipPosition});
     }
 
-    public ArrayList<int[]> getAllCoordinates() {
+    public ArrayList<int[]> getAllCoordinatesList() {
         return shipCoordinatesList;
     }
 
