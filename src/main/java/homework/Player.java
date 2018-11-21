@@ -5,28 +5,16 @@ import homework.battle_map.BattleMap;
 import homework.ship.AbstractShip;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Player {
-    SetShipsOnMapService playerSetShipsOnMapService = new SetShipsOnMapService();
+    private SetShipsOnMapService playerSetShipsOnMapService = new SetShipsOnMapService();
     AbstractBattleMap playerRealMap = playerSetShipsOnMapService.getMapWithShips();
     AbstractBattleMap playerMapToDrowShoots = new BattleMap();
-    ArrayList<AbstractShip> playerListOfShips = playerSetShipsOnMapService.getInitialListOfShips();
+    private ArrayList<AbstractShip> playerListOfShips = playerSetShipsOnMapService.getInitialListOfShips();
     ArrayList<String> playerShootList = new ArrayList<>();
-    AbstractShip lastKilledShip = null;
-    boolean justKilledShip = false;
+    private AbstractShip lastKilledShip = null;
+    private boolean justKilledShip = false;
 
-    /**
-     * поставить поле перед в самом начале что бы нормально рисовалось
-     */
-    ArrayList<AbstractShip> copyListOfShipsToDraw = new ArrayList<>();
-
-    /**
-     * @param copyListOfShipsToDraw вызвать вначале что бы рисовать
-     */
-    public void setCopyListOfShipsToDraw(ArrayList<AbstractShip> copyListOfShipsToDraw) {
-        this.copyListOfShipsToDraw = new ArrayList<AbstractShip>(copyListOfShipsToDraw);
-    }
 
     /**
      * Main method which implements player turn logic.
@@ -48,7 +36,7 @@ public class Player {
         if (isShootHitTheDeck(coordinates, enemyListOfShips)) {
             if (justKilledShip) {
                 System.out.println("Ship was killed");
-                System.out.println( enemyListOfShips.size() + " ships left to destroy");
+                System.out.println(enemyListOfShips.size() + " ships left to destroy");
                 justKilledShip = false;
             } else {
                 System.out.println("Shoot hit the deck");
@@ -60,36 +48,41 @@ public class Player {
             drawMiss(coordinates);
             return passTurnToComputer();
         }
-
-        //return passTurnToComputer(); // 1 0 -1
     }
 
-
-    public void drawMiss(String coordinates) {
+    /**
+     * displays miss on map
+     */
+    private void drawMiss(String coordinates) {
         int x = Character.getNumericValue(coordinates.charAt(0));
         int y = Character.getNumericValue(coordinates.charAt(1));
         playerMapToDrowShoots.getMap().get(y).set(x, '✕');
     }
 
-    public void drawHit(String coordinates) {
+    /**
+     * displays shoot on map
+     */
+    private void drawHit(String coordinates) {
         int x = Character.getNumericValue(coordinates.charAt(0));
         int y = Character.getNumericValue(coordinates.charAt(1));
         playerMapToDrowShoots.getMap().get(y).set(x, '☒');
     }
 
+    /**
+     * check if shoot hit the deck
+     *
+     * @return false in case when did not hurt
+     */
     private boolean isShootHitTheDeck(String coordinates, ArrayList<AbstractShip> enemyListOfShips) {
         for (AbstractShip enemyShip : enemyListOfShips) {
             for (int[] deckCoordinates : enemyShip.getShipCoordinatesList()) {
                 String shipCoordinates = deckCoordinates[0] + "" + deckCoordinates[1];
-                if (shipCoordinates.equals(coordinates)) {/// отнимаем жизни корабля проверяем не убил ли, если убит - удаляем его из списка
+                if (shipCoordinates.equals(coordinates)) {
                     enemyShip.shipLife--;
                     if (enemyShip.shipLife == 0) {
-                        //System.out.println("Ship killed");
                         lastKilledShip = enemyShip;
                         drawKilledShip();
                         justKilledShip = true;
-
-
                         enemyListOfShips.remove(enemyShip);
                     }
                     return true;
@@ -100,7 +93,10 @@ public class Player {
         return false;
     }
 
-    public void drawKilledShip() {
+    /**
+     * displays killed ship and area around on map
+     */
+    private void drawKilledShip() {
         ArrayList<int[]> shipArea = new ArrayList<>();
         for (int[] coordinates : lastKilledShip.getAllCoordinatesList()) {
             ArrayList<int[]> listToadd = flagDeck(coordinates);
@@ -115,51 +111,29 @@ public class Player {
             if (playerMapToDrowShoots.getMap().get(y).get(x).equals('■')) {
                 drawHit(x + "" + y);
             }
-
         }
-
-
     }
 
-    public ArrayList<int[]> flagDeck(int[] coordinates) {
-        ArrayList<int[]> listOfFlags = new ArrayList<>();
-        int x = coordinates[0];
-        int y = coordinates[1];
-        int xHelper = -1;
-
-        for (int i = 0; i < 3; i++) {
-            int yHelper = -1;
-
-            if (x + xHelper >= 0 & x + xHelper < 10) {
-
-                for (int j = 0; j < 3; j++) {
-                    if (y + yHelper >= 0 & y + yHelper < 10) {
-                        listOfFlags.add(new int[]{x + xHelper, y + yHelper});
-                    }
-                    yHelper++;
-                }
-            }
-            xHelper++;
-        }
-        return listOfFlags;
-    }
-
-    public boolean isEnemyListOfShipsEmpty(ArrayList<AbstractShip> enemyListOfShips) {
-        return enemyListOfShips.size() == 0;
+    /**
+     * returns list with coordinates to flag as shooted
+     *
+     * @return list
+     */
+    private ArrayList<int[]> flagDeck(int[] coordinates) {
+        return Computer.getInts(coordinates);
     }
 
     /**
      * @param coordinates - player input
      * @return true if input is wrong. If everything is ok, return false
      */
-    public boolean checkCoordinatesForWrongInput(String coordinates) {
-        if (coordinates == "" || coordinates == null) {
-            System.out.println("Null input");
-            ;
+    private boolean checkCoordinatesForWrongInput(String coordinates) {
+        if (coordinates.equals("")) {
+            System.out.println("Null input. Repeat turn");
             return true;
         }
         if (coordinates.length() != 2) {
-            System.out.println("Wrong input");
+            System.out.println("Wrong input. Repeat turn");
             return true;
         }
         int x = Character.getNumericValue(coordinates.charAt(0));
@@ -169,11 +143,16 @@ public class Player {
         if (isX_Correct & isY_Correct) {
             return false;
         } else {
-            System.out.println("Wrong input");
+            System.out.println("Wrong input. Repeat turn");
             return true;
         }
     }
 
+    /**
+     * check if coordinates for repeat
+     *
+     * @return true in case not repeated
+     */
     private boolean isCoordinatesRepeat(String coordinates) {
         for (String shootFromList : getPlayerShootList()) {
             if (shootFromList.equals(coordinates)) {
@@ -195,16 +174,11 @@ public class Player {
         return 0;
     }
 
-    private int finishGame() {
-        return -1;
-    }
-
-
     public ArrayList<AbstractShip> getPlayerListOfShips() {
         return playerListOfShips;
     }
 
-    public ArrayList<String> getPlayerShootList() {
+    private ArrayList<String> getPlayerShootList() {
         return playerShootList;
     }
 }

@@ -1,30 +1,37 @@
 package homework.ship;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public abstract class AbstractShip {
+    /**
+     * Initial coordinate x of ship
+     */
     int xFrontSideShipPosition;
+    /**
+     * Initial coordinate y of ship
+     */
     int yFrontSideShipPosition;
+    /**
+     * Last coordinate x of ship
+     */
     int xBacksideShipPosition;
+    /**
+     * Last coordinate y of ship
+     */
     int yBacksideShipPosition;
-    int lenght;
+
+    int length;
     boolean isAlive;
-    public ArrayList<int[]> shipCoordinatesList = new ArrayList<>();
-    List<Character> shipView = new ArrayList<>();
+
     public int shipLife;
+
+    /**
+     * List with coordinates of each deck
+     */
+    ArrayList<int[]> shipCoordinatesList = new ArrayList<>();
 
     public ArrayList<int[]> getShipCoordinatesList() {
         return shipCoordinatesList;
-    }
-
-    public boolean checkIsShipDead() {
-        if (shipLife < 1) {
-            setAlive(false);
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public void setCoordinatesList() {
@@ -36,64 +43,26 @@ public abstract class AbstractShip {
         return shipCoordinatesList;
     }
 
-
     public void setIntermediateCoordinates() {
-    }
-
-    public int getxFrontSideShipPosition() {
-        return xFrontSideShipPosition;
     }
 
     public void setxFrontSideShipPosition(int xFrontSideShipPosition) {
         this.xFrontSideShipPosition = xFrontSideShipPosition;
     }
 
-    public int getyFrontSideShipPosition() {
-        return yFrontSideShipPosition;
-    }
-
     public void setyFrontSideShipPosition(int yFrontSideShipPosition) {
         this.yFrontSideShipPosition = yFrontSideShipPosition;
-    }
-
-    public int getxBacksideShipPosition() {
-        return xBacksideShipPosition;
     }
 
     public void setxBacksideShipPosition(int xBacksideShipPosition) {
         this.xBacksideShipPosition = xBacksideShipPosition;
     }
 
-    public int getyBacksideShipPosition() {
-        return yBacksideShipPosition;
-    }
-
     public void setyBacksideShipPosition(int yBacksideShipPosition) {
         this.yBacksideShipPosition = yBacksideShipPosition;
     }
 
-    public boolean isAlive() {
-        return isAlive;
-    }
-
-    public void setAlive(boolean alive) {
-        isAlive = alive;
-    }
-
-    public List<Character> getShipView() {
-        return shipView;
-    }
-
-    public int getLenght() {
-        return lenght;
-    }
-
-    public void setLenght(int lenght) {
-        this.lenght = lenght;
-    }
-
-    @Override
-    public String toString() {
-        return shipView.toString();
+    public int getLength() {
+        return length;
     }
 }

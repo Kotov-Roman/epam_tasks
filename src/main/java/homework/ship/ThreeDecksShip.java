@@ -1,18 +1,18 @@
 package homework.ship;
 
 public class ThreeDecksShip extends AbstractShip {
-    int xSecondDeckPosition;
-    int ySecondDeckPosition;
+    private int xSecondDeckPosition;
+    private int ySecondDeckPosition;
 
-    public ThreeDecksShip() {
-        shipView.add('■');
-        shipView.add('■');
-        shipView.add('■');
-        lenght = shipView.size();
+    ThreeDecksShip() {
         isAlive = true;
         shipLife = 3;
+        length = 3;
     }
 
+    /**
+     * Set coordinates for each deck of ship
+     */
     @Override
     public void setIntermediateCoordinates() {
         if (xFrontSideShipPosition != xBacksideShipPosition) {
@@ -23,7 +23,9 @@ public class ThreeDecksShip extends AbstractShip {
             ySecondDeckPosition = yBacksideShipPosition - 1;
         }
     }
-
+    /**
+     * Set coordinates list of each deck of ship
+     */
     @Override
     public void setCoordinatesList() {
         super.setCoordinatesList();

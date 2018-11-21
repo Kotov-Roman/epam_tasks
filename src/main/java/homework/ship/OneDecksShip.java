@@ -1,11 +1,10 @@
 package homework.ship;
 
-public class OneDecksShip extends AbstractShip {
+class OneDecksShip extends AbstractShip {
 
-    public OneDecksShip(){
-        shipView.add('■');
-        lenght = shipView.size();
+    OneDecksShip(){
         isAlive = true;
         shipLife =1;
+        length =1;
     }
 }

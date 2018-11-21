@@ -1,21 +1,20 @@
 package homework.ship;
 
 public class FourDecksShip extends AbstractShip {
-    int xSecondDeckPosition;
-    int ySecondDeckPosition;
-    int xThirdDeckPosition;
-    int yThirdDeckPosition;
+    private int xSecondDeckPosition;
+    private int ySecondDeckPosition;
+    private int xThirdDeckPosition;
+    private int yThirdDeckPosition;
 
-    public FourDecksShip() {
-        shipView.add('■');
-        shipView.add('■');
-        shipView.add('■');
-        shipView.add('■');
-        lenght = shipView.size();
+    FourDecksShip() {
         shipLife = 4;
+        length =4;
         isAlive = true;
     }
 
+    /**
+     * Set coordinates for each deck of ship
+     */
     @Override
     public void setIntermediateCoordinates() {
         if (xFrontSideShipPosition != xBacksideShipPosition) {
@@ -23,15 +22,17 @@ public class FourDecksShip extends AbstractShip {
             xSecondDeckPosition = xBacksideShipPosition - 2;
             yThirdDeckPosition = yBacksideShipPosition;
             ySecondDeckPosition = yBacksideShipPosition;
-        }
-        else {
+        } else {
             xThirdDeckPosition = xBacksideShipPosition;
             xSecondDeckPosition = xBacksideShipPosition;
-            yThirdDeckPosition = yBacksideShipPosition -1;
-            ySecondDeckPosition = yBacksideShipPosition -2;
+            yThirdDeckPosition = yBacksideShipPosition - 1;
+            ySecondDeckPosition = yBacksideShipPosition - 2;
         }
     }
 
+    /**
+     * Set coordinates list of ship
+     */
     @Override
     public void setCoordinatesList() {
         super.setCoordinatesList();

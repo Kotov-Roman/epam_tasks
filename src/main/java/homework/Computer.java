@@ -10,51 +10,62 @@ import java.util.Set;
 
 public class Computer {
 
-    SetShipsOnMapService computerSetShipsOnMapService = new SetShipsOnMapService();
+    private SetShipsOnMapService computerSetShipsOnMapService = new SetShipsOnMapService();
     AbstractBattleMap computerRealMap = computerSetShipsOnMapService.getMapWithShips();
     ArrayList<AbstractShip> computerListOfShips = computerSetShipsOnMapService.getInitialListOfShips();
 
     ArrayList<int[]> computerShootList = new ArrayList<>();
-    boolean iskilled = false;
-    boolean isHurted = false;
+    private boolean isKilled = false;
+    private boolean isHurted = false;
 
-    int[] computerShootCoordinatesToShow = new int[2];
-    boolean isPreviousShootHurtDeck = false;
-    boolean isAnyShipHurted = false;
-    int[] computerLastHit = new int[2];
-    int[] computerFirsHit = new int[2];
-    int direction = 1;
+    private int[] computerShootCoordinatesToShow = new int[2];
+    private boolean isAnyShipHurted = false;
+    private int[] computerLastHit = new int[2];
+    private int[] computerFirsHit = new int[2];
+    private int direction = 1;
 
+    Computer() {
+    }
+
+    /**
+     * Computer's turn method
+     *
+     * @return 0 in case to pass turn or 1 in case to repeat turn
+     */
     public int computerTurn(ArrayList<AbstractShip> playerListOfShips) {//  return 1 | 0 |
         return shootWithLogic(playerListOfShips);
     }
 
-
     /**
-     * @param playerListOfShips
-     * @return
+     * Computer's method with shoot logic
+     *
+     * @return 0 in case to pass turn or 1 in case to repeat turn
      */
-    public int shootWithLogic(ArrayList<AbstractShip> playerListOfShips) {
+    private int shootWithLogic(ArrayList<AbstractShip> playerListOfShips) {
         if (isAnyShipHurted) {
-            return tryTokillShip(playerListOfShips);
+            return tryToKillShip(playerListOfShips);
         } else {
             int[] shootCoordinates = usualShootWithRepeatCheck();
             computerShootCoordinatesToShow = shootCoordinates;
 
             if (isShootHurtTheDeck(shootCoordinates, playerListOfShips)) {
-                isPreviousShootHurtDeck = true;
                 computerFirsHit = shootCoordinates;
                 computerLastHit = shootCoordinates;
                 isShipKilled(shootCoordinates, playerListOfShips);
                 return repeatTurn();
             } else {
-                isPreviousShootHurtDeck = false;
                 return passTurnToPlayer();
             }
         }
     }
 
-    public int tryTokillShip(ArrayList<AbstractShip> playerListOfShips) {
+    /**
+     * Computer's turn logic in case if player have any hurt ship.
+     * Logic shoots near the hurt ship coordinates, attempting to kill it
+     *
+     * @return 0 in case to pass turn or 1 in case to repeat turn
+     */
+    private int tryToKillShip(ArrayList<AbstractShip> playerListOfShips) {
         int x = computerLastHit[0];
         int y = computerLastHit[1];
         if (direction == 1) {
@@ -149,12 +160,24 @@ public class Computer {
         }
     }
 
-    void usualShoot(int x, int y) {
+    /**
+     * Make usual computer shot and add it to shootList
+     *
+     * @param x coordinate
+     * @param y coordinate
+     */
+    private void usualShoot(int x, int y) {
         getComputerShootList().add(new int[]{x, y});
-        //System.out.println("Координаты выстрела из попытки добивания: " + x + " " + y);
     }
 
-    boolean isShootable(int x, int y) {
+    /**
+     * Check for sense to shoot at specified coordinates
+     *
+     * @param x coordinate
+     * @param y coordinate
+     * @return true if it have sense
+     */
+    private boolean isShootable(int x, int y) {
         for (int[] coordinatesFromList : getComputerShootList()) {
             if (Arrays.equals(coordinatesFromList, new int[]{x, y})) {
                 return false;
@@ -163,48 +186,60 @@ public class Computer {
         return true;
     }
 
-
-    public boolean isShipKilled(int[] computerShoot, ArrayList<AbstractShip> playerListOfShips) {
+    /**
+     * Check if ship killed
+     *
+     * @return true if ship killed
+     */
+    private boolean isShipKilled(int[] computerShoot, ArrayList<AbstractShip> playerListOfShips) {
         for (AbstractShip playerShip : playerListOfShips) {
             for (int[] shipDeckCoordinates : playerShip.getShipCoordinatesList()) {
                 if (Arrays.equals(shipDeckCoordinates, computerShoot)) {
                     if (playerShip.shipLife == 0) {
-                        flagKilledShipArea(playerShip);/////////////////////////////asasfafasfasfasfa
+                        flagKilledShipArea(playerShip);
                         playerListOfShips.remove(playerShip);
                         isHurted = true;
-                        iskilled = true;
+                        isKilled = true;
                         isAnyShipHurted = false;
                         return true;
                     }
                 }
             }
         }
-
         isAnyShipHurted = true;
         return false;
     }
 
-    public void flagKilledShipArea(AbstractShip enemyShip) {
+    /**
+     * Flag area of killed ship on map
+     */
+    private void flagKilledShipArea(AbstractShip enemyShip) {
         ArrayList<int[]> shipArea = new ArrayList<>();
         for (int[] coordinates : enemyShip.getAllCoordinatesList()) {
             ArrayList<int[]> listToadd = flagDeck(coordinates);
             shipArea.addAll(listToadd);
         }
-        //System.out.println(shipArea.size() + " размер плоащади добавления");
-
-
-       // int size = computerShootList.size();
-        //System.out.println(size + " размер списка выстрелов");
-
         computerShootList.addAll(shipArea);
-        ArrayList<int[]> listToAdd = new ArrayList<>();
+        ArrayList<int[]> listToAdd;
         listToAdd = useKostil(computerShootList);
         computerShootList = listToAdd;
-
-
     }
 
-    public ArrayList<int[]> flagDeck(int[] coordinates) {
+    /**
+     * returns list with coordinates to flag as shooted
+     *
+     * @return list
+     */
+    private ArrayList<int[]> flagDeck(int[] coordinates) {
+        return getInts(coordinates);
+    }
+
+    /**
+     * returns list with coordinates to flag as shooted
+     *
+     * @return list
+     */
+    public static ArrayList<int[]> getInts(int[] coordinates) {
         ArrayList<int[]> listOfFlags = new ArrayList<>();
         int x = coordinates[0];
         int y = coordinates[1];
@@ -227,9 +262,13 @@ public class Computer {
         return listOfFlags;
     }
 
-    public ArrayList<int[]> useKostil(ArrayList<int[]> listToEdit) {
+    /**
+     * Metgod helps to returns ArrayList with elements int [] wich are nt repeated
+     *
+     * @return list with unique elements
+     */
+    private ArrayList<int[]> useKostil(ArrayList<int[]> listToEdit) {
         ArrayList<String> listWithStrings = new ArrayList<>();
-        int index = 0;
         for (int[] coordinates : listToEdit) {
             int x = coordinates[0];
             int y = coordinates[1];
@@ -248,22 +287,23 @@ public class Computer {
         return result;
     }
 
-
-    public int[] usualShootWithRepeatCheck() {
-        int count = 1;
+    /**
+     * generate random shoot coordinates and check it for repeat
+     *
+     * @return array of coordinates which are nor repeated
+     */
+    private int[] usualShootWithRepeatCheck() {
         int[] usualShootCoordinates = new int[2];
         while (true) {
             int x = (int) (Math.random() * 10);
             int y = (int) (Math.random() * 10);
             usualShootCoordinates[0] = x;
             usualShootCoordinates[1] = y;
-            //System.out.println(" попытка выстрела компа :" + count);
             try {
                 Thread.sleep(2);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            count++;
             if (isUniqueShoot(usualShootCoordinates)) {
                 break;
             }
@@ -272,25 +312,30 @@ public class Computer {
         return usualShootCoordinates;
     }
 
-
-    public boolean isShootHurtTheDeck(int[] computerShoot, ArrayList<AbstractShip> playerListOfShips) {
+    /**
+     * check of shoot damaged any deck
+     *
+     * @return true in case when ship damaged
+     */
+    private boolean isShootHurtTheDeck(int[] computerShoot, ArrayList<AbstractShip> playerListOfShips) {
         for (AbstractShip playerShip : playerListOfShips) {
             for (int[] shipDeckCoordinates : playerShip.getShipCoordinatesList()) {
                 if (Arrays.equals(shipDeckCoordinates, computerShoot)) {
                     playerShip.shipLife--;
-                    //System.out.println("ПОПААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААЛ");
-                    //System.out.println("ПОПААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААЛ");
-                    isPreviousShootHurtDeck = true;
                     isHurted = true;
                     return true;
                 }
             }
         }
-        isPreviousShootHurtDeck = false;
         return false;
     }
 
-    public boolean isUniqueShoot(int[] shootCoordinates) {
+    /**
+     * Check for shoot repeat
+     *
+     * @return true in case it is not repeated
+     */
+    private boolean isUniqueShoot(int[] shootCoordinates) {
         for (int[] shootFromList : getComputerShootList()) {
             if (Arrays.equals(shootCoordinates, shootFromList)) {
                 return false;
@@ -298,24 +343,25 @@ public class Computer {
         }
         return true;
     }
-    public void showLastShootCoordinates(){
+
+    /**
+     * displays shoot result
+     */
+    public void showLastShootCoordinates() {
         System.out.println("Computer's shoot coordinates : " + Arrays.toString(computerShootCoordinatesToShow));
-        if (iskilled){
+        if (isKilled) {
             System.out.println("Ship is killed by computer");
-            iskilled = false;
+            isKilled = false;
             isHurted = false;
-        }else {
-            if (isHurted ){
+        } else {
+            if (isHurted) {
                 System.out.println("Ship is damaged by computer");
                 isHurted = false;
-            }
-            else  {
+            } else {
                 System.out.println("Computer missed");
             }
 
         }
-
-
     }
 
     private int passTurnToPlayer() {
@@ -326,23 +372,11 @@ public class Computer {
         return 1;
     }
 
-    private int finishGame() {
-        return -1;
-    }
-
-    public SetShipsOnMapService getComputerSetShipsOnMapService() {
-        return computerSetShipsOnMapService;
-    }
-
-    public AbstractBattleMap getComputerRealMap() {
-        return computerRealMap;
-    }
-
     public ArrayList<AbstractShip> getComputerListOfShips() {
         return computerListOfShips;
     }
 
-    public ArrayList<int[]> getComputerShootList() {
+    private ArrayList<int[]> getComputerShootList() {
         return computerShootList;
     }
 
