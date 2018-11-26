@@ -8,14 +8,17 @@ public class Array5x5 {
             {"30", "31", "32", "33", "34"},
             {"40", "41", "42", "43", "44"}};
 
+    /**
+     * Method returns string which consist of sequince elements with even index from each element of array
+     *
+     * @return string result
+     */
     public String printLeftToRight() {
-        //Array is not empty check
-        if (arr.length == 0) {
+        if (arr == null || arr.length == 0) {
             throw new IllegalArgumentException("array should not be empty");
         }
-        //length element check
-        for (String[] anArr : arr) {
-            if (anArr.length == 0) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == null || arr[i].length == 0) {
                 throw new IllegalArgumentException("Array should not have empty elements ");
             }
         }
@@ -33,13 +36,18 @@ public class Array5x5 {
         return stringBuilder.toString();
     }
 
+    /**
+     * /** Method returns string which consist of sequince elements with odd index from each element of array
+     *
+     * @return string result
+     */
     public String printUpToDown() {
-        if (arr.length == 0) {
+        if (arr == null || arr.length == 0) {
             throw new IllegalArgumentException("array should not be empty");
         }
         //length element check
-        for (String[] anArr : arr) {
-            if (anArr.length == 0) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == null || arr[i].length == 0) {
                 throw new IllegalArgumentException("Array should not have empty elements ");
             }
         }

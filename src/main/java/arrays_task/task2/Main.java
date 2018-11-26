@@ -1,8 +1,9 @@
 package arrays_task.task2;
 
+
 public class Main {
     public static void main(String[] args) {
-        String[][] arr = {{"1", "2"},{}};
+        String[][] arr = {{"1", "2"}, {"3", "4"}};
         SequencePrinter printer = new SequencePrinter();
         printer.setArr(arr);
         System.out.println(printer.PrintSequence(0, 0, 1));

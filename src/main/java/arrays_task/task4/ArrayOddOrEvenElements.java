@@ -8,40 +8,47 @@ public class ArrayOddOrEvenElements {
             {"30", "31", "32", "33", "34"},
             {"40", "41", "42", "43", "44"}};
 
+    /**
+     * /** Method returns string which consist of sequince elements with even index from each element of array
+     *
+     * @return string result
+     */
     public String printEvenElementsStrings() {
         //Array is not empty check
-        if (arr.length == 0) {
+        if (checkNotNullOrEmpty()) {
             throw new IllegalArgumentException("array should not be empty");
         }
         //length element check
-        for (String[] anArr : arr) {
-            if (anArr.length == 0) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == null ||arr[i].length == 0) {
                 throw new IllegalArgumentException("Array should not have empty elements ");
             }
         }
         StringBuilder stringBuilder = new StringBuilder();
-        for (String[] anArr : arr) {
-            for (int elementIndex = 0; elementIndex < anArr.length; elementIndex++) {
+        for (int stringIndex = 0; stringIndex < arr.length; stringIndex++) {
+            for (int elementIndex = 0; elementIndex < arr[stringIndex].length; elementIndex++) {
                 if (elementIndex % 2 == 0) {
-                    stringBuilder.append(anArr[elementIndex]);
+                    stringBuilder.append(arr[stringIndex][elementIndex]);
                 }
             }
         }
         return stringBuilder.toString();
     }
 
+    /**
+     * /** Method returns string which consist of sequince elements with odd index from each element of array
+     *
+     * @return string result
+     */
     public String printOddElementsColumn() {
-        //Array is not empty check
-        if (arr.length == 0) {
+        if (checkNotNullOrEmpty()) {
             throw new IllegalArgumentException("array should not be empty");
         }
-        //length element check
-        for (String[] anArr : arr) {
-            if (anArr.length == 0) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == null ||arr[i].length == 0) {
                 throw new IllegalArgumentException("Array should not have empty elements ");
             }
         }
-        //checking lengths of elements for equals
         for (int i = 0; i < arr.length - 1; i++) {
             if (arr[i].length != arr[i + 1].length) {
                 throw new IllegalArgumentException("Array should have equals lengths in elements ");
@@ -57,6 +64,15 @@ public class ArrayOddOrEvenElements {
             }
         }
         return stringBuilder.toString();
+    }
+
+    public boolean checkNotNullOrEmpty(){
+        if (arr == null ||arr.length == 0){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public String[][] getArr() {

@@ -8,18 +8,22 @@ public class SequencePrinter {
         {"30", "31", "32", "33", "34"},
         {"40", "41", "42", "43", "44"}};
 
+    /** Method returns sequence elements of array from specified start index inclusive to
+     * specified last index inclusive at specified element of array.
+     * @param targetArrayIndex
+     * @param startIndex
+     * @param endInedex
+     * @return  the specified substring
+     */
     public String PrintSequence(int targetArrayIndex, int startIndex, int endInedex) {
-        //Array is not empty check
-        if (arr.length == 0) {
+        if (arr == null || arr.length == 0) {
             throw new IllegalArgumentException("array should not be empty");
         }
-        //length element check
-        for (String[] anArr : arr) {
-            if (anArr.length == 0) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == null || arr[i].length ==0) {
                 throw new IllegalArgumentException("Array should not have empty elements ");
             }
         }
-        //input check
         if (startIndex > endInedex || targetArrayIndex > arr.length - 1) {
             throw new IllegalArgumentException("Wrong  input");
         }
