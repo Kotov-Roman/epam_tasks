@@ -1,2 +1,2 @@
 # gradle_SeaBattle
-Simply implementation of game "Sea Battle".
+all my tasks at epam
